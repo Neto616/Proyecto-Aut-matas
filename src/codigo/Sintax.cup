@@ -1,0 +1,128 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal Linea,InicioPrograma, FinPrograma, TipoEntero, TipoDecimal, TipoCadena, 
+TipoBooleano, SignoIgual, Suma, Resta, Multiplicacion, Division, InicioIf, 
+FinIf, Else,FinElse, Comentario, MayorQue, MenorQue, IgualQue, DiferenteQue, 
+MayorIgualQue, MenorIgualQue, InicioWhile, FinWhile,InicioDoWhile, FinDoWhile,InicioFor,FinFor, PuntoComa, AbreParentesis,
+ CierraParentesis, CadenaDeTexto, NoNumero, Numero, Identificador, ERROR,RTrue,
+    RFalse,NUMDECIMAL;
+
+    
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, ELSE,
+    WHILE, DO_WHILE, FOR,T_Dato,OpAtribucion,Estado,OpLog,Condicion,VCon,VM,Mat,VD;
+
+start with INICIO;
+
+INICIO ::= 
+    InicioPrograma SENTENCIA FinPrograma |
+    InicioPrograma  FinPrograma
+;
+
+SENTENCIA ::= 
+   DECLARACION |IF|Comentario|
+    Mat|
+    WHILE |
+    DO_WHILE |
+    FOR |
+   SENTENCIA DECLARACION|
+   SENTENCIA IF |
+   SENTENCIA Comentario|
+   SENTENCIA Mat |
+   SENTENCIA WHILE |
+    SENTENCIA DO_WHILE |
+    SENTENCIA FOR 
+;
+
+DECLARACION ::= 
+    TipoEntero Identificador PuntoComa | 
+    TipoEntero Identificador SignoIgual VM PuntoComa |
+ 
+    TipoCadena Identificador PuntoComa | 
+    TipoCadena  Identificador SignoIgual CadenaDeTexto PuntoComa |
+    TipoCadena  Identificador SignoIgual Identificador PuntoComa |
+
+    TipoBooleano  Identificador SignoIgual Estado PuntoComa|
+    TipoBooleano  Identificador SignoIgual Identificador PuntoComa|
+    TipoBooleano Identificador  PuntoComa|
+
+    TipoDecimal Identificador PuntoComa |
+    TipoDecimal Identificador SignoIgual VD PuntoComa 
+;
+
+IF ::= 
+InicioIf Condicion SENTENCIA FinIf |
+InicioIf Condicion SENTENCIA FinIf ELSE |
+InicioIf Condicion FinIf
+
+;
+
+ELSE ::= 
+Else FinElse|
+Else SENTENCIA FinElse
+;
+WHILE ::=
+InicioWhile Condicion SENTENCIA FinWhile|
+InicioWhile Condicion FinWhile 
+;
+DO_WHILE ::= 
+InicioDoWhile Condicion SENTENCIA FinDoWhile|
+InicioDoWhile Condicion FinDoWhile 
+;
+FOR ::=
+ InicioFor DECLARACION_FOR SENTENCIA FinFor|
+ InicioFor DECLARACION_FOR  FinFor
+;
+DECLARACION_FOR ::= 
+  AbreParentesis DECLARACION Condicion PuntoComa  Mat  CierraParentesis
+;
+
+
+OpAtribucion ::=
+    Suma |
+    Resta |  
+    Multiplicacion | 
+    Division|SignoIgual
+;
+Estado ::=
+    RTrue |
+    RFalse 
+;
+OpLog ::=
+    MayorQue| 
+    MenorQue| 
+    IgualQue| 
+    DiferenteQue| 
+    MayorIgualQue| 
+    MenorIgualQue
+;
+Condicion ::=
+    VCon OpLog VCon
+;
+VCon::=
+    Identificador|Numero|Estado    
+;
+VM::=
+    Identificador|Numero   
+;
+Mat ::=
+    Identificador OpAtribucion VD PuntoComa |
+    Identificador OpAtribucion VD OpAtribucion VD PuntoComa
+;
+VD::=
+    Identificador|Numero|NUMDECIMAL   
+;
