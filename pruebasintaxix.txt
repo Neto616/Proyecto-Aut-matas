@@ -1,0 +1,20 @@
+*
+@@Comentario
+                  
+enteros numEntero igual 1;
+
+Si 3 MaQ 5
+
+@@codigooo
+
+numEntero igual 5 suma 3;
+
+FinSi
+
+For (enteros x igual 1; x MeQ 5;x igual 1;)
+
+@@codigooo
+
+FinFor
+
+**
